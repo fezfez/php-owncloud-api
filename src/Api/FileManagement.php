@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Owncloud\Api;
 
-/**
- * @author Gustavo Pilla <pilla.gustavo@gmail.com>
- */
-class FileManagement extends \League\Flysystem\Filesystem
-{
+use League\Flysystem\Filesystem;
+use League\Flysystem\WebDAV\WebDAVAdapter;
+use Sabre\DAV\Client;
 
-    public function __construct($host, $username, $password, $settings = array())
+class FileManagement extends Filesystem
+{
+    public function __construct(string $host, string $username, string $password, array $settings = [])
     {
-        $settings['baseUri'] = $host;
+        $settings['baseUri']  = $host;
         $settings['userName'] = $username;
         $settings['password'] = $password;
 
-        $client = new \Sabre\DAV\Client($settings);
-        $adapter = new \League\Flysystem\Adapter\WebDav($client, 'remote.php/webdav/');
+        $client  = new Client($settings);
+        $adapter = new WebDAVAdapter($client, 'remote.php/webdav/');
 
         parent::__construct($adapter);
     }

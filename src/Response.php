@@ -1,56 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Owncloud;
+
+use Psr\Http\Message\StreamInterface;
 
 class Response
 {
-
+    /** @var StreamInterface  */
     private $response;
 
-    public function __construct($response)
+    public function __construct(StreamInterface $response)
     {
         $this->response = $response;
     }
 
-    public function isOk()
+    public function isOk() : bool
     {
-        if ($this->getStatusCode() == 100) {
-            return true;
-        }
-        return false;
+        return $this->getStatusCode() === 100;
     }
 
     public function getStatusCode()
     {
         if (isset($this->response['ocs'])) {
             return $this->response['ocs']['meta']['statuscode'];
-        } else {
-            return $this->response['statuscode'];
         }
 
+        return $this->response['statuscode'];
     }
 
     public function getMessage()
     {
         if (isset($this->response['ocs'])) {
             return $this->response['ocs']['meta']['message'];
-        } else {
-            return $this->response['message'];
         }
 
+        return $this->response['message'];
     }
 
     public function getErrorMessage()
     {
         $message = '';
-        if ($this->getStatusCode() != '') {
+        if ($this->getStatusCode() !== '') {
             $message .= "Code: {$this->getStatusCode()} : ";
         }
-        if ($this->getMessage() != '') {
-            $message .= $this->getMessage();
-        } else {
+        if ($this->getMessage() === '') {
             return 'Not expected response from webservice';
         }
+
+        $message .= $this->getMessage();
         return $message;
     }
 
@@ -61,7 +60,7 @@ class Response
      */
     public function getData()
     {
-        if (!$this->isOk()) {
+        if (! $this->isOk()) {
             throw new ResponseException($this->getErrorMessage());
         }
         return $this->response['ocs']['data'];

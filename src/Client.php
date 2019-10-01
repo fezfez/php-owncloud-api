@@ -1,33 +1,29 @@
 <?php
 
-namespace Owncloud;
+declare(strict_types=1);
 
-use Owncloud\Response;
+namespace Owncloud;
 
 class Client extends \GuzzleHttp\Client
 {
-
-    public function __construct($config = null)
+    public function __construct(array $config = [])
     {
         $config['defaults']['query'] = ['format' => 'json'];
         parent::__construct($config);
     }
 
-    public function get($uri = null, $headers = null, array $options = array())
+    public function get($uri = null, array $options = []) : Response
     {
-        $data = parent::get($uri, $headers, $options)->json();
-        return new Response($data);
+        return new Response(parent::get($uri, $options)->getBody());
     }
 
-    public function post($uri = null, array $options = array())
+    public function post($uri = null, array $options = []) : Response
     {
-        $data = parent::post($uri, $options)->json();
-        return new Response($data);
+        return new Response(parent::post($uri, $options)->getBody());
     }
 
-    public function delete($uri = null, array $options = array())
+    public function delete($uri = null, array $options = []) : Response
     {
-        $data = parent::delete($uri, $options)->json();
-        return new Response($data);
+        return new Response(parent::delete($uri, $options)->getBody());
     }
 }

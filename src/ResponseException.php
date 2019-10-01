@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Owncloud;
 
-class ResponseException extends \Exception
-{
+use Exception;
 
+class ResponseException extends Exception
+{
 }

@@ -1,0 +1,7 @@
+/src/Tests export-ignore
+/contrib export-ignore
+/docs export-ignore
+.travis-ci.yml export-ignore
+.phpunit.xml.dist export-ignore
+.phpstan.neon export-ignore
+README.md export-ignore
