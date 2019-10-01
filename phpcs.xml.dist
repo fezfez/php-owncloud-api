@@ -10,10 +10,6 @@
     <arg value="nps"/>
 
     <file>src</file>
-    <file>tests</file>
 
     <rule ref="Doctrine"/>
-
-
-
 </ruleset>
